@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html ng-app="app">
   <head>
+
     <meta charset="utf-8">
+
     <title>Pell Grant Calculator</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" charset="utf-8">
     <link rel="stylesheet" href="/main.css" media="screen" title="no title" charset="utf-8">
+
     <script src="/bower_components/jquery/dist/jquery.min.js" charset="utf-8"></script>
     <script src="/bower_components/angular/angular.min.js" charset="utf-8"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
     <script src="app.js" charset="utf-8"></script>
+
   </head>
   <body ng-controller="main">
     <div class="container">
@@ -72,12 +76,8 @@
 
           <div class="col col-md-4">
             <div class="grant">
-              <div class="grant-amount">
-                ${{ compute(calc) | number:2 }}
-              </div>
-              <div class="grant-label">
-                Expected Pell Grant
-              </div>
+              <div class="grant-amount"> ${{ compute(calc) | number:2 }} </div>
+              <div class="grant-label"> Expected Pell Grant </div>
             </div>
           </div>
 

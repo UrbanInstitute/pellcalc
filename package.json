@@ -1,0 +1,26 @@
+{
+  "name": "pellcalc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./node_modules/.bin/bower install",
+    "deploy": "node -e \"require('gulp').src('./app/*').pipe(require('gulp-gh-pages')())\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsouthga/pellcalc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bsouthga/pellcalc/issues"
+  },
+  "homepage": "https://github.com/bsouthga/pellcalc#readme",
+  "devDependencies": {
+    "bower": "^1.5.3",
+    "gulp": "^3.9.0",
+    "gulp-gh-pages": "^0.5.2"
+  }
+}
