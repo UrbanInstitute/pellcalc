@@ -1,23 +1,26 @@
-
 /*
  * All the possible parameters in the different calculators...
  */
 var parameters = {
   fam: {
     name: 'Family Size',
-    range: [1, 100]
+    range: [1, 100],
+    start: 3
   },
   agi: {
     name: 'Adjusted Gross Income',
-    range: [0, 1000000]
+    range: [0, 1000000],
+    start: 30000
   },
   col: {
     name: 'Number of Other Family in College',
-    range: [0, 100]
+    range: [0, 100],
+    start: 2
   },
   chi: {
     name: 'Number of children (other than student)',
-    range: [0, 100]
+    range: [0, 100],
+    start: 2
   }
 }
 
@@ -30,7 +33,7 @@ var calculators = [
   {
     name:       'Two-Factor Pell',
     parameters: ['agi', 'fam'],
-    equation:   '(agi * fam)/fam + agi'
+    equation:   'agi/fam + agi'
   },
   {
     name:       'Three-Factor Pell',
@@ -63,7 +66,7 @@ angular
       parameters : parameters,
       calculators : calculators.map(function(c) {
         c.values = c.parameters.reduce(function(o, p) {
-          o[p] = 0;
+          o[p] = parameters[p].start;
           return o;
         }, {});
         return c;

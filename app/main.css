@@ -16,6 +16,42 @@
   padding-bottom: 30px;
 }
 
+.parameter {
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  word-wrap: break-word;
+  width: 200px;
+  padding: 20px;
+}
+
+.parameter input {
+  width: 100%;
+  font-size: 16px;
+  display: block;
+  text-align: right;
+}
+
+.parameter div {
+  margin-top: 10px;
+}
+
+.grant {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #ddd;
+  padding: 30px;
+}
+
+.grant-amount {
+  font-size: 30px;
+}
+
+.grant-label {
+  font-size: 16px;
+}
+
 img {
   margin: 0 auto;
 }

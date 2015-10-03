@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" charset="utf-8">
     <link rel="stylesheet" href="/main.css" media="screen" title="no title" charset="utf-8">
     <script src="/bower_components/jquery/dist/jquery.min.js" charset="utf-8"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
     <script src="/bower_components/angular/angular.min.js" charset="utf-8"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
     <script src="app.js" charset="utf-8"></script>
   </head>
   <body ng-controller="main">
@@ -40,9 +40,7 @@
         </div>
 
         <div class="col col-md-4 align-center">
-          <img src="http://www.aviatorcameragear.com/wp-content/uploads/2012/07/placeholder-470x352.jpg"
-               class="img-responsive"
-               alt="" />
+          <img src="example.jpg" class="img-responsive"/>
           <label>The 2014-15 FAFSA is ten pages long and has 105 questions.</label>
         </div>
 
@@ -63,19 +61,24 @@
           <div class="col col-md-8">
             <span ng-repeat="param in calc.parameters" class="parameter">
               <input type="number"
+                     class="form-control"
                      ng-model="calc.values[param]"
                      name="{{ param }}"
-                     min="{{parameters[param].range[0]}}"
-                     max="{{parameters[param].range[1]}}"
-                     value="{{parameters[param].range[0]}}">
-              <label for="">
-                {{ parameters[param].name }}
-              </label>
+                     min="{{ parameters[param].range[0] }}"
+                     max="{{ parameters[param].range[1] }}">
+              <div> {{ parameters[param].name }} </div>
             </span>
           </div>
 
           <div class="col col-md-4">
-            {{ compute(calc) }}
+            <div class="grant">
+              <div class="grant-amount">
+                ${{ compute(calc) | number:2 }}
+              </div>
+              <div class="grant-label">
+                Expected Pell Grant
+              </div>
+            </div>
           </div>
 
       </div>
