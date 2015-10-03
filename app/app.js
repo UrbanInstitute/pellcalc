@@ -70,7 +70,7 @@ angular
       })
     });
 
-    $scope.evaluate = function(calc) {
+    $scope.compute = function(calc) {
       with(calc.values) {
         return eval(calc.equation);
       }
