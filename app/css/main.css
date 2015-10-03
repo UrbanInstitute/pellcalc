@@ -1,0 +1,21 @@
+.container {
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.col {
+  margin-top: 20px;
+}
+
+.calc-row {
+  border-top: 1px solid #000;
+  padding-bottom: 30px;
+}
+
+img {
+  margin: 0 auto;
+}
