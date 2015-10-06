@@ -58,28 +58,46 @@
 
       <div ng-repeat="calc in calculators" class="row calc-row">
 
+        <form name="modelForm">
+
           <div class="col col-md-12">
             <h3>{{ calc.name }}</h3>
           </div>
 
           <div class="col col-md-8">
-            <span ng-repeat="param in calc.parameters" class="parameter">
-              <input type="number"
-                     class="form-control"
-                     ng-model="calc.values[param]"
-                     name="{{ param }}"
-                     min="{{ parameters[param].range[0] }}"
-                     max="{{ parameters[param].range[1] }}">
-              <div> {{ parameters[param].name }} </div>
-            </span>
+              <span ng-repeat="param in calc.parameters" class="parameter">
+                <input type="number"
+                       class="form-control"
+                       ng-model="calc.values[param]"
+                       name="{{ param }}"
+                       min="{{ parameters[param].range[0] }}"
+                       max="{{ parameters[param].range[1] }}"
+                       step="{{ parameters[param].step || 1 }}">
+                <div> {{ parameters[param].name }} </div>
+              </span>
           </div>
 
           <div class="col col-md-4">
             <div class="grant">
-              <div class="grant-amount"> ${{ compute(calc) | number:2 }} </div>
+              <div class="grant-amount">
+                <span ng-if="modelForm.$valid">
+                  ${{ calc.compute() | number:2 }}
+                </span>
+                <span ng-if="!modelForm.$valid" class="form-error">
+                  One of your choices is {{
+                      modelForm.$error.max ?
+                        "too high!":
+                        modelForm.$error.min ?
+                          "too low!":
+                          "invalid!"
+                  }}
+                </span>
+              </div>
               <div class="grant-label"> Expected Pell Grant </div>
             </div>
           </div>
+
+        </form>
 
       </div>
 
