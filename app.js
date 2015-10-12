@@ -73,11 +73,10 @@ var calculators = [
     parameters: ['agi', 'fam'],
     compute: function() {
       var v     = this.values,
-          n     = (Math.min(v.fam, 8) | 0),
-          pov   = povertyGuideLines[n],
-          grant = pell(v.agi, pov);
+          n     = Math.min(v.fam, 8) | 0, // coerce to int with bitwise OR
+          pov   = povertyGuideLines[n];
 
-      return bound(capGrant(grant));
+      return bound(capGrant(pell(v.agi, pov)));
     }
   },
   {
@@ -85,11 +84,10 @@ var calculators = [
     parameters: ['agi', 'fam', 'chi'],
     compute: function() {
       var v     = this.values,
-          n     = (Math.min(v.fam + v.chi, 8) | 0),
-          pov   = povertyGuideLines[n],
-          grant = pell(v.agi, pov);
+          n     = Math.min(v.fam + v.chi, 8) | 0,
+          pov   = povertyGuideLines[n];
 
-      return bound(capGrant(grant));
+      return bound(capGrant(pell(v.agi, pov)));
     }
   },
   {
@@ -97,7 +95,7 @@ var calculators = [
     parameters: ['agi', 'fam'],
     compute: function() {
       var v     = this.values,
-          n     = (Math.min(v.fam, 8) | 0),
+          n     = Math.min(v.fam, 8) | 0,
           pov   = povertyGuideLines[n],
           grant = capGrant(pell(v.agi, pov));
 
@@ -113,11 +111,11 @@ var calculators = [
     name:       'Modified Pell on a Postcard',
     parameters: ['agi', 'chi'],
     compute: function() {
-      var grant,
-          v = this.values;
+      var grant = pellOnAPostcard[0].grant,
+          v     = this.values;
 
       // find nearest agi for grant
-      pellOnAPostcard.forEach(function(row) {
+      angular.forEach(pellOnAPostcard, function(row) {
         if (row.agi <= v.agi) {
           grant = row.grant;
         }
