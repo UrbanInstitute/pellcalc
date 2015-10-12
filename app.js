@@ -1,6 +1,32 @@
 ;(function() {
 
 
+function capGrant(grant, cap, roundLower, roundUpper) {
+  cap = cap || 5775;
+  roundLower = roundLower || 288;
+  roundUpper = roundUpper || 577;
+
+  grant = grant < roundUpper                   ?
+          (grant < roundLower ? 0 : roundUpper) :
+          grant;
+
+  return Math.max(0, Math.min(grant, cap));
+}
+
+
+var povertyGuideLines = {
+  // family members, poverty line
+  1: 11670,
+  2: 15730,
+  3: 19790,
+  4: 23850,
+  5: 27910,
+  6: 31970,
+  7: 36030,
+  8: 40090
+};
+
+
 /*
  * All the possible parameters in the different calculators...
  */
@@ -39,13 +65,11 @@ var calculators = [
     parameters: ['agi', 'fam'],
     compute: function() {
       var v = this.values,
-          grant = 0;
+          n = (Math.min(v.fam, 8) | 0),
+          pov = povertyGuideLines[n],
+          grant = 5775 - (v.agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov));
 
-      for (var param in v) {
-        grant += v[param];
-      }
-
-      return grant;
+      return capGrant(grant);
     }
   },
   {
@@ -53,13 +77,11 @@ var calculators = [
     parameters: ['agi', 'fam', 'chi'],
     compute: function() {
       var v = this.values,
-          grant = 0;
+          n = (Math.min(v.fam + v.chi, 8) | 0),
+          pov = povertyGuideLines[n],
+          grant = 5775 - (v.agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov));
 
-      for (var param in v) {
-        grant += v[param];
-      }
-
-      return grant;
+      return capGrant(grant);
     }
   },
   {
@@ -67,21 +89,20 @@ var calculators = [
     parameters: ['agi', 'chi'],
     compute: function() {
       var v = this.values,
-          grant = 0;
+          n = (Math.min(v.fam + v.chi, 8) | 0),
+          pov = povertyGuideLines[n],
+          grant = 5775 - (v.agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov));
 
-      for (var param in v) {
-        grant += v[param];
-      }
-
-      return grant;
+      return capGrant(grant);
     }
   },
   {
     name:       'Modified Pell on a Postcard',
     parameters: ['agi', 'chi'],
     compute: function() {
-      var v = this.values,
-          lookUp = [
+      var grant,
+          v = this.values,
+          grantValues = [
             { agi: 14999,    grant:	5550 },
             { agi: 19999,    grant:	5000 },
             { agi: 24999,    grant:	4500 },
@@ -93,14 +114,11 @@ var calculators = [
             { agi: 74999,    grant:	600 },
             { agi: 99999,    grant:	400 },
             { agi: 100000,   grant:	0 }
-          ],
-          grant = lookUp[lookUp.length - 1];
+          ];
 
-      $.each(lookUp, function(index, row) {
-        // find first row with applicable agi and break...
-        if (row.agi >= v.agi) {
+      grantValues.forEach(function(row) {
+        if (row.agi <= v.agi) {
           grant = row.grant;
-          return false;
         }
       });
 
@@ -132,5 +150,6 @@ angular
     });
 
   }]);
+
 
 })();

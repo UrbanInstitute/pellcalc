@@ -42,6 +42,12 @@ body{
   margin-top: 10px;
 }
 
+@media (max-width: 992px) {
+  .paramter-list {
+    text-align: center;
+  }
+}
+
 .grant {
   width: 100%;
   margin: 0 auto;
