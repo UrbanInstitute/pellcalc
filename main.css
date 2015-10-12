@@ -1,5 +1,5 @@
-body{
-    font-family: Lato,"Helvetica Neue",Helvetica,Arial,sans-serif;
+body {
+  font-family: Lato,"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .container {
   margin-top: 50px;
@@ -15,10 +15,10 @@ body{
 }
 
 .calc-row {
-    /*border-top: 1px solid #fefefe;*/
-    padding-bottom: 30px;
-    background-color: #efefef;
-    margin-top: 20px;
+  /*border-top: 1px solid #fefefe;*/
+  padding-bottom: 30px;
+  background-color: #efefef;
+  margin-top: 20px;
 }
 
 .parameter {
@@ -30,12 +30,31 @@ body{
   padding: 20px;
 }
 
-.parameter input {
-    width: 100%;
-    font-size: 18px;
-    display: block;
-    height: 55px;
-    text-align: right;
+.parameter input, .parameter label {
+  width: 100%;
+  font-size: 18px;
+  display: block;
+  height: 55px;
+  text-align: right;
+}
+
+.parameter input:focus + label {
+  display: none;
+}
+
+.parameter label {
+  cursor: pointer;
+  font-weight: normal;
+  position: relative;
+  display: block;
+  top: -55px;
+  margin-bottom: -55px;
+  padding-top: 0px;
+  line-height: 55px;
+}
+
+.parameter label:hover {
+  text-decoration: underline;
 }
 
 .parameter div {
@@ -43,7 +62,7 @@ body{
 }
 
 @media (max-width: 992px) {
-  .paramter-list {
+  .parameter-list {
     text-align: center;
   }
 }
@@ -57,9 +76,9 @@ body{
 }
 
 .grant-amount {
-    font-size: 3em;
-    font-weight: 700;
-    color: #1696d1;
+  font-size: 3em;
+  font-weight: 700;
+  color: #1696d1;
 }
 
 .grant-label {

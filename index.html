@@ -65,15 +65,29 @@
             <h3>{{ calc.name }}</h3>
           </div>
 
-          <div class="col col-md-8 paramter-list">
-              <span ng-repeat="param in calc.parameters" class="parameter">
+          <div class="col col-md-8 parameter-list">
+              <span ng-repeat="param in calc.parameters"
+                    ng-class="{ 'has-error': modelForm[param].$invalid }"
+                    class="parameter">
                 <input type="number"
                        class="form-control"
-                       ng-model="calc.values[param]"
+                       id="{{ calc.id + '-' + param }}"
                        name="{{ param }}"
-                       min="{{ parameters[param].range[0] }}"
-                       max="{{ parameters[param].range[1] }}"
-                       step="{{ parameters[param].step || 1 }}">
+                       min="{{ parameters[param].range(calc.values)[0] }}"
+                       max="{{ parameters[param].range(calc.values)[1] }}"
+                       step="{{ parameters[param].step || 1 }}"
+                       ng-model="calc.values[param]"
+                       ng-pattern="parameters[param].pattern">
+                <label for="{{ calc.id + '-' + param }}"
+                       class="form-control"
+                       ng-if="modelForm[param].$valid">
+                  {{ param === 'agi' ? '$' : '' }}{{ calc.values[param] | number:0 }}
+                </label>
+                <label for="{{ calc.id + '-' + param }}"
+                       class="form-control"
+                       ng-if="modelForm[param].$invalid">
+                  (invalid)
+                </label>
                 <div> {{ parameters[param].name }} </div>
               </span>
           </div>
@@ -85,13 +99,7 @@
                   ${{ calc.compute() | number:2 }}
                 </span>
                 <span ng-if="!modelForm.$valid" class="form-error">
-                  One of your choices is {{
-                      modelForm.$error.max ?
-                        "too high!":
-                        modelForm.$error.min ?
-                          "too low!":
-                          "invalid!"
-                  }}
+                  One of your choices is invalid.
                 </span>
               </div>
               <div class="grant-label"> Expected Pell Grant </div>

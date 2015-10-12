@@ -41,24 +41,31 @@ var pellOnAPostcard = [
 var parameters = {
   fam: {
     name: 'Family Size',
-    range: [1, 100],
-    start: 3
+    // bounds of input, can be function of other parameter's value...
+    range: function(values) { return [1, 100]; },
+    // start value of param
+    start: 3,
+    // pattern to validate input with
+    pattern: /^\d+/
   },
   agi: {
     name: 'Adjusted Gross Income',
-    range: [0, 1000000],
+    range: function(values) { return [0, 1000000]; },
     start: 30000,
-    step: 1000
+    step: 1000,
+    pattern: /^\$?(\d+|\d{1,3}(,\d{3})*)(\.[0-9]{1,2})?$/
   },
   col: {
     name: 'Number of Other Family in College',
-    range: [0, 100],
-    start: 2
+    range: function(values) { return [0, Math.min(values.fam, 100)]; },
+    start: 2,
+    pattern: /^\d+/
   },
   chi: {
     name: 'Number of children (other than student)',
-    range: [0, 100],
-    start: 2
+    range: function(values) { return [0, Math.min(values.fam, 100)]; },
+    start: 2,
+    pattern: /^\d+/
   }
 };
 
@@ -72,7 +79,7 @@ var calculators = [
     name:       'Two-Factor Pell',
     parameters: ['agi', 'fam'],
     compute: function() {
-      var v     = this.values,
+      var v     = this.values, // stores the current values of the parameters
           n     = Math.min(v.fam, 8) | 0, // coerce to int with bitwise OR
           pov   = povertyGuideLines[n];
 
@@ -180,11 +187,10 @@ angular
       parameters : parameters,
       calculators : calculators.map(function(calculator) {
 
-        // CSS compatible id for divs
         calculator.id = calculator
           .name
           .toLowerCase()
-          .replace(/[^a-z]/g, '_');
+          .replace(/\W+/g,'-');
 
         // create values object with starting value
         calculator.values = calculator
