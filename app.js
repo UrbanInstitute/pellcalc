@@ -179,29 +179,29 @@ angular
   .controller('main', ['$scope', function($scope) {
 
     /*
-     * Add the paramters and calculators to the $scope,
+     * Add the parameters and calculators to the $scope,
      * so we can reference them in the angular directives
      * within index.html
      */
-    angular.extend($scope, {
-      parameters : parameters,
-      calculators : calculators.map(function(calculator) {
 
-        calculator.id = calculator
-          .name
-          .toLowerCase()
-          .replace(/\W+/g,'-');
+    $scope.parameters  = parameters;
 
-        // create values object with starting value
-        calculator.values = calculator
-          .parameters
-          .reduce(function(o, p) {
-            o[p] = parameters[p].start;
-            return o;
-          }, {});
+    $scope.calculators = calculators.map(function(calculator) {
 
-        return calculator;
-      })
+      calculator.id = calculator
+        .name
+        .toLowerCase()
+        .replace(/\W+/g,'-');
+
+      // create values object with starting value
+      calculator.values = calculator
+        .parameters
+        .reduce(function(o, p) {
+          o[p] = parameters[p].start;
+          return o;
+        }, {});
+
+      return calculator;
     });
 
   }]);
