@@ -1,21 +1,11 @@
 ;(function() {
 
 
-function capGrant(grant, cap, roundLower, roundUpper) {
-  cap = cap || 5775;
-  roundLower = roundLower || 288;
-  roundUpper = roundUpper || 577;
-
-  grant = grant < roundUpper                   ?
-          (grant < roundLower ? 0 : roundUpper) :
-          grant;
-
-  return Math.max(0, Math.min(grant, cap));
-}
-
-
+/*
+ * family members, poverty line
+ * http://aspe.hhs.gov/2014-poverty-guidelines#tresholds
+ */
 var povertyGuideLines = {
-  // family members, poverty line
   1: 11670,
   2: 15730,
   3: 19790,
@@ -25,6 +15,24 @@ var povertyGuideLines = {
   7: 36030,
   8: 40090
 };
+
+
+/*
+ * Pell on a Postcard lookup table by AGI
+ */
+var pellOnAPostcard = [
+  { agi: 14999,    grant:	5550 },
+  { agi: 19999,    grant:	5000 },
+  { agi: 24999,    grant:	4500 },
+  { agi: 29999,    grant:	4050 },
+  { agi: 34999,    grant:	3250 },
+  { agi: 39999,    grant:	2150 },
+  { agi: 44999,    grant:	1100 },
+  { agi: 49999,    grant:	800 },
+  { agi: 74999,    grant:	600 },
+  { agi: 99999,    grant:	400 },
+  { agi: 100000,   grant:	0 }
+];
 
 
 /*
@@ -52,7 +60,7 @@ var parameters = {
     range: [0, 100],
     start: 2
   }
-}
+};
 
 
 
@@ -64,36 +72,41 @@ var calculators = [
     name:       'Two-Factor Pell',
     parameters: ['agi', 'fam'],
     compute: function() {
-      var v = this.values,
-          n = (Math.min(v.fam, 8) | 0),
-          pov = povertyGuideLines[n],
-          grant = 5775 - (v.agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov));
+      var v     = this.values,
+          n     = (Math.min(v.fam, 8) | 0),
+          pov   = povertyGuideLines[n],
+          grant = pell(v.agi, pov);
 
-      return capGrant(grant);
+      return bound(capGrant(grant));
     }
   },
   {
     name:       'Three-Factor Pell',
     parameters: ['agi', 'fam', 'chi'],
     compute: function() {
-      var v = this.values,
-          n = (Math.min(v.fam + v.chi, 8) | 0),
-          pov = povertyGuideLines[n],
-          grant = 5775 - (v.agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov));
+      var v     = this.values,
+          n     = (Math.min(v.fam + v.chi, 8) | 0),
+          pov   = povertyGuideLines[n],
+          grant = pell(v.agi, pov);
 
-      return capGrant(grant);
+      return bound(capGrant(grant));
     }
   },
   {
     name:       'Hamilton Project',
-    parameters: ['agi', 'chi'],
+    parameters: ['agi', 'fam'],
     compute: function() {
-      var v = this.values,
-          n = (Math.min(v.fam + v.chi, 8) | 0),
-          pov = povertyGuideLines[n],
-          grant = 5775 - (v.agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov));
+      var v     = this.values,
+          n     = (Math.min(v.fam, 8) | 0),
+          pov   = povertyGuideLines[n],
+          grant = capGrant(pell(v.agi, pov));
 
-      return capGrant(grant);
+      // AGI less than 200% of poverty, can recieve max of up to bound
+      if (v.agi < pov*2) {
+        return bound(grant);
+      }
+
+      return bound(grant, 2888);
     }
   },
   {
@@ -101,32 +114,55 @@ var calculators = [
     parameters: ['agi', 'chi'],
     compute: function() {
       var grant,
-          v = this.values,
-          grantValues = [
-            { agi: 14999,    grant:	5550 },
-            { agi: 19999,    grant:	5000 },
-            { agi: 24999,    grant:	4500 },
-            { agi: 29999,    grant:	4050 },
-            { agi: 34999,    grant:	3250 },
-            { agi: 39999,    grant:	2150 },
-            { agi: 44999,    grant:	1100 },
-            { agi: 49999,    grant:	800 },
-            { agi: 74999,    grant:	600 },
-            { agi: 99999,    grant:	400 },
-            { agi: 100000,   grant:	0 }
-          ];
+          v = this.values;
 
-      grantValues.forEach(function(row) {
+      // find nearest agi for grant
+      pellOnAPostcard.forEach(function(row) {
         if (row.agi <= v.agi) {
           grant = row.grant;
         }
       });
 
       // add 250 per child up to 1000 extra
-      return grant + Math.min(v.chi*250, 1000);
+      grant = capGrant(grant + Math.min(v.chi*250, 1000), 300, 600);
+
+      return bound(grant);
     }
   }
 ];
+
+
+/*
+ * base Pell Grant Formula
+ */
+function pell(agi, pov) {
+  return 5775 - (agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov))
+}
+
+
+/*
+ * lower pell grant rounding schema
+ */
+function capGrant(grant, roundLower, roundUpper) {
+  roundLower = roundLower || 288;
+  roundUpper = roundUpper || 577;
+
+  grant = grant < roundUpper                    ?
+          (grant < roundLower ? 0 : roundUpper) :
+          grant;
+
+  return grant;
+}
+
+
+/*
+ * bound a value by [lower, upper]
+ */
+function bound(val, upper, lower) {
+  lower = lower || 0;
+  upper = upper || 5775;
+  return Math.max(lower, Math.min(upper, val))
+}
 
 
 
@@ -137,15 +173,30 @@ angular
   .module('app', [])
   .controller('main', ['$scope', function($scope) {
 
+    /*
+     * Add the paramters and calculators to the $scope,
+     * so we can reference them in the angular directives
+     * within index.html
+     */
     angular.extend($scope, {
       parameters : parameters,
-      calculators : calculators.map(function(c) {
-        c.id = c.name.toLowerCase().replace(/[^a-z]/g, '_');
-        c.values = c.parameters.reduce(function(o, p) {
-          o[p] = parameters[p].start;
-          return o;
-        }, {});
-        return c;
+      calculators : calculators.map(function(calculator) {
+
+        // CSS compatible id for divs
+        calculator.id = calculator
+          .name
+          .toLowerCase()
+          .replace(/[^a-z]/g, '_');
+
+        // create values object with starting value
+        calculator.values = calculator
+          .parameters
+          .reduce(function(o, p) {
+            o[p] = parameters[p].start;
+            return o;
+          }, {});
+
+        return calculator;
       })
     });
 
