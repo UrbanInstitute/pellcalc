@@ -20,25 +20,43 @@ var povertyGuideLines = {
 /*
  * Pell on a Postcard lookup table by AGI
  */
-var pellOnAPostcard = [
-  { agi: 14999,    grant:	5550 },
-  { agi: 19999,    grant:	5000 },
-  { agi: 24999,    grant:	4500 },
-  { agi: 29999,    grant:	4050 },
-  { agi: 34999,    grant:	3250 },
-  { agi: 39999,    grant:	2150 },
-  { agi: 44999,    grant:	1100 },
-  { agi: 49999,    grant:	800 },
-  { agi: 74999,    grant:	600 },
-  { agi: 99999,    grant:	400 },
-  { agi: 100000,   grant:	0 }
-];
-
+var pellOnAPostcardLookup = {
+  base: [
+    { agi: 14999, grant: 5775 },
+    { agi: 19999, grant: 5250 },
+    { agi: 24999, grant: 4700 },
+    { agi: 29999, grant: 4250 },
+    { agi: 34999, grant: 3450 },
+    { agi: 39999, grant: 2300 },
+    { agi: 44999, grant: 1250 },
+    { agi: 49999, grant: 1050 },
+    { agi: 74999, grant: 800 },
+    { agi: 99999, grant: 600 }
+  ],
+  modified: [
+    { agi: 19999,	grant: 5775 },
+    { agi: 22499,	grant: 5250 },
+    { agi: 24999,	grant: 4700 },
+    { agi: 27499,	grant: 4150 },
+    { agi: 29999,	grant: 3400 },
+    { agi: 32499,	grant: 2850 },
+    { agi: 34999,	grant: 2100 },
+    { agi: 39999,	grant: 1550 },
+    { agi: 44999,	grant: 1050 },
+    { agi: 59999,	grant: 600 },
+    { agi: 74999,	grant: 250 }
+  ]
+};
 
 /*
  * All the possible parameters in the different calculators...
  */
 var parameters = {
+  dep: {
+    name: 'Student Dependency Status',
+    toggle: ['Dependent', 'Independent'],
+    start: 'Dependent'
+  },
   fam: {
     name: 'Family Size',
     // bounds of input, can be function of other parameter's value...
@@ -80,7 +98,7 @@ var calculators = [
     parameters: ['agi', 'fam'],
     compute: function() {
       var v     = this.values, // stores the current values of the parameters
-          n     = Math.min(v.fam, 8) | 0, // coerce to int with bitwise OR
+          n     = Math.min(v.fam, 6) | 0, // coerce to int with bitwise OR
           pov   = povertyGuideLines[n];
 
       return bound(capGrant(pell(v.agi, pov)));
@@ -88,10 +106,10 @@ var calculators = [
   },
   {
     name:       'Three-Factor Pell',
-    parameters: ['agi', 'fam', 'chi'],
+    parameters: ['agi', 'fam', 'col'],
     compute: function() {
       var v     = this.values,
-          n     = Math.min(v.fam + v.chi, 8) | 0,
+          n     = Math.min(v.fam + v.col, 7) | 0,
           pov   = povertyGuideLines[n];
 
       return bound(capGrant(pell(v.agi, pov)));
@@ -99,42 +117,37 @@ var calculators = [
   },
   {
     name:       'Hamilton Project',
-    parameters: ['agi', 'fam'],
+    parameters: ['agi', 'fam', 'dep'],
     compute: function() {
       var v     = this.values,
-          n     = Math.min(v.fam, 8) | 0,
+          n     = Math.min(v.fam, 6) | 0,
           pov   = povertyGuideLines[n],
           grant = capGrant(pell(v.agi, pov));
 
-      // AGI less than 200% of poverty, can recieve max of up to bound
-      if (v.agi < pov*2) {
-        return bound(grant);
+      if (v.dep === 'Independent') {
+        switch(true) {
+          case v.agi < pov*2: return 5775;
+          case v.agi > pov*2 && v.agi < pov*2.5: return 2888;
+          case v.agi > pov*2.5: return 0;
+        }
       }
 
-      return bound(grant, 2888);
+      // AGI less than 200% of poverty, can recieve max of up to bound
+      return grant;
     }
+  },
+  {
+    name:       'Base Pell on a Postcard',
+    parameters: ['agi', 'chi'],
+    compute: pellOnAPostCardFormula('base')
   },
   {
     name:       'Modified Pell on a Postcard',
     parameters: ['agi', 'chi'],
-    compute: function() {
-      var grant = pellOnAPostcard[0].grant,
-          v     = this.values;
-
-      // find nearest agi for grant
-      angular.forEach(pellOnAPostcard, function(row) {
-        if (row.agi <= v.agi) {
-          grant = row.grant;
-        }
-      });
-
-      // add 250 per child up to 1000 extra
-      grant = capGrant(grant + Math.min(v.chi*250, 1000), 300, 600);
-
-      return bound(grant);
-    }
+    compute: pellOnAPostCardFormula('modified')
   }
 ];
+
 
 
 /*
@@ -142,6 +155,30 @@ var calculators = [
  */
 function pell(agi, pov) {
   return 5775 - (agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov))
+}
+
+
+/**
+ * Pell on a postcard formula
+ */
+function pellOnAPostCardFormula(type) {
+  return function() {
+    var table = pellOnAPostcardLookup[type],
+        grant = table[0].grant,
+        v     = this.values;
+
+    // find nearest agi for grant
+    angular.forEach(table, function(row) {
+      if (row.agi <= v.agi) {
+        grant = row.grant;
+      }
+    });
+
+    // add 250 per child up to 1000 extra
+    grant = capGrant(grant + Math.min(v.chi*250, 1000), 300, 600);
+
+    return bound(grant);
+  };
 }
 
 
@@ -175,7 +212,7 @@ function bound(val, upper, lower) {
  * create the angular app!
  */
 angular
-  .module('app', [])
+  .module('app', ['ui.bootstrap'])
   .controller('main', ['$scope', function($scope) {
 
     /*

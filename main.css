@@ -26,11 +26,11 @@ body {
   vertical-align: top;
   text-align: center;
   word-wrap: break-word;
-  width: 200px;
+  width: 220px;
   padding: 20px;
 }
 
-.parameter input, .parameter label {
+.parameter .range-parameter, .parameter .param-value {
   width: 100%;
   font-size: 18px;
   display: block;
@@ -38,11 +38,11 @@ body {
   text-align: right;
 }
 
-.parameter input:focus + label {
+.parameter .range-parameter:focus + .param-value {
   display: none;
 }
 
-.parameter label {
+.parameter .param-value {
   cursor: pointer;
   font-weight: normal;
   position: relative;
@@ -53,11 +53,19 @@ body {
   line-height: 55px;
 }
 
-.parameter label:hover {
+.parameter .toggle-param.btn-group .btn {
+  font-size: 12px;
+  height: 35px;
+  line-height: 35px;
+  margin-top: 10px;
+  padding-top: 0px;
+}
+
+.parameter .param-value:hover {
   text-decoration: underline;
 }
 
-.parameter div {
+.parameter .param-name {
   margin-top: 10px;
 }
 

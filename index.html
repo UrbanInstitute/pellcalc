@@ -11,6 +11,7 @@
 
     <script src="bower_components/jquery/dist/jquery.min.js" charset="utf-8"></script>
     <script src="bower_components/angular/angular.min.js" charset="utf-8"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js" charset="utf-8"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
     <script src="app.js" charset="utf-8"></script>
 
@@ -69,26 +70,38 @@
               <span ng-repeat="param in calc.parameters"
                     ng-class="{ 'has-error': modelForm[param].$invalid }"
                     class="parameter">
-                <input type="number"
-                       class="form-control"
-                       id="{{ calc.id + '-' + param }}"
-                       name="{{ param }}"
-                       min="{{ parameters[param].range(calc.values)[0] }}"
-                       max="{{ parameters[param].range(calc.values)[1] }}"
-                       step="{{ parameters[param].step || 1 }}"
-                       ng-model="calc.values[param]"
-                       ng-pattern="parameters[param].pattern">
-                <label for="{{ calc.id + '-' + param }}"
-                       class="form-control"
-                       ng-if="modelForm[param].$valid">
-                  {{ param === 'agi' ? '$' : '' }}{{ calc.values[param] | number:0 }}
-                </label>
-                <label for="{{ calc.id + '-' + param }}"
-                       class="form-control"
-                       ng-if="modelForm[param].$invalid">
-                  (invalid)
-                </label>
-                <div> {{ parameters[param].name }} </div>
+                <span ng-if="parameters[param].range">
+                  <input type="number"
+                         class="form-control range-parameter"
+                         id="{{ calc.id + '-' + param }}"
+                         name="{{ param }}"
+                         min="{{ parameters[param].range(calc.values)[0] }}"
+                         max="{{ parameters[param].range(calc.values)[1] }}"
+                         step="{{ parameters[param].step || 1 }}"
+                         ng-model="calc.values[param]"
+                         ng-pattern="parameters[param].pattern">
+                  <label for="{{ calc.id + '-' + param }}"
+                         class="form-control param-value"
+                         ng-if="modelForm[param].$valid">
+                    {{ param === 'agi' ? '$' : '' }}{{ calc.values[param] | number:0 }}
+                  </label>
+                  <label for="{{ calc.id + '-' + param }}"
+                         class="form-control param-value"
+                         ng-if="modelForm[param].$invalid">
+                    (invalid)
+                  </label>
+                </span>
+                <span ng-if="parameters[param].toggle">
+                  <div class="btn-group toggle-param">
+                    <label class="btn btn-default"
+                           ng-model="calc.values[param]"
+                           ng-repeat="toggleValue in parameters[param].toggle"
+                           uib-btn-radio="'{{ toggleValue }}'">
+                      {{ toggleValue }}
+                    </label>
+                  </div>
+                </span>
+                <div class="param-name"> {{ parameters[param].name }} </div>
               </span>
           </div>
 
