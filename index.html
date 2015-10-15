@@ -75,15 +75,15 @@
                          class="form-control range-parameter"
                          id="{{ calc.id + '-' + param }}"
                          name="{{ param }}"
-                         min="{{ parameters[param].range(calc.values)[0] }}"
-                         max="{{ parameters[param].range(calc.values)[1] }}"
+                         min="{{ parameters[param].range(parameters.values)[0] }}"
+                         max="{{ parameters[param].range(parameters.values)[1] }}"
                          step="{{ parameters[param].step || 1 }}"
-                         ng-model="calc.values[param]"
+                         ng-model="parameters.values[param]"
                          ng-pattern="parameters[param].pattern">
                   <label for="{{ calc.id + '-' + param }}"
                          class="form-control param-value"
                          ng-if="modelForm[param].$valid">
-                    {{ param === 'agi' ? '$' : '' }}{{ calc.values[param] | number:0 }}
+                    {{ param === 'agi' ? '$' : '' }}{{ parameters.values[param] | number:0 }}
                   </label>
                   <label for="{{ calc.id + '-' + param }}"
                          class="form-control param-value"
@@ -94,7 +94,7 @@
                 <span ng-if="parameters[param].toggle">
                   <div class="btn-group toggle-param">
                     <label class="btn btn-default"
-                           ng-model="calc.values[param]"
+                           ng-model="parameters.values[param]"
                            ng-repeat="toggleValue in parameters[param].toggle"
                            uib-btn-radio="'{{ toggleValue }}'">
                       {{ toggleValue }}
