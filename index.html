@@ -70,20 +70,20 @@
               <span ng-repeat="param in calc.parameters"
                     ng-class="{ 'has-error': modelForm[param].$invalid }"
                     class="parameter">
-                <span ng-if="parameters[param].range">
+                <span ng-if="!parameters[param].toggle">
                   <input type="number"
                          class="form-control range-parameter"
                          id="{{ calc.id + '-' + param }}"
                          name="{{ param }}"
-                         min="{{ parameters[param].range(parameters.values)[0] }}"
-                         max="{{ parameters[param].range(parameters.values)[1] }}"
+                         min="{{ parameters[param].min }}"
+                         max="{{ parameters[param].max }}"
                          step="{{ parameters[param].step || 1 }}"
-                         ng-model="parameters.values[param]"
+                         ng-model="values[param]"
                          ng-pattern="parameters[param].pattern">
                   <label for="{{ calc.id + '-' + param }}"
                          class="form-control param-value"
                          ng-if="modelForm[param].$valid">
-                    {{ param === 'agi' ? '$' : '' }}{{ parameters.values[param] | number:0 }}
+                    {{ param === 'agi' ? '$' : '' }}{{ values[param] | number:0 }}
                   </label>
                   <label for="{{ calc.id + '-' + param }}"
                          class="form-control param-value"
@@ -94,7 +94,7 @@
                 <span ng-if="parameters[param].toggle">
                   <div class="btn-group toggle-param">
                     <label class="btn btn-default"
-                           ng-model="parameters.values[param]"
+                           ng-model="values[param]"
                            ng-repeat="toggleValue in parameters[param].toggle"
                            uib-btn-radio="'{{ toggleValue }}'">
                       {{ toggleValue }}
