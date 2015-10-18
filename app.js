@@ -50,14 +50,14 @@ var parameters = {
   col: {
     name: 'Number of Other Family in College',
     min: 0,
-    get max() { return Math.min(values.fam, 100); },
+    get max() { return Math.min(values.fam - 1, 100); },
     start: 2,
     pattern: /^\d+/
   },
   chi: {
     name: 'Number of children (other than student)',
     min: 0,
-    get max() { return Math.min(values.fam, 100); },
+    get max() { return Math.min(values.fam - 1, 100); },
     start: 2,
     pattern: /^\d+/
   }
@@ -109,9 +109,9 @@ var calculators = [
     }
   },
   {
-    name:       'Base Pell on a Postcard',
+    name:       'Original Pell on a Postcard',
     parameters: ['agi', 'chi'],
-    compute: pellOnAPostCardFormula('base')
+    compute: pellOnAPostCardFormula('original')
   },
   {
     name:       'Modified Pell on a Postcard',
@@ -123,7 +123,7 @@ var calculators = [
 
 
 /**
- * base Pell Grant Formula
+ * original Pell Grant Formula
  */
 function pell(agi, pov) {
   return 5775 - (agi - 1.5*pov)*( 5775 / (2.5*pov - 1.5*pov))
@@ -138,7 +138,7 @@ function pellOnAPostCardFormula(type) {
    * Pell on a Postcard lookup table by AGI
    */
   var pellOnAPostcardLookup = {
-    base: [
+    original: [
       { agi: 14999, grant: 5775 },
       { agi: 19999, grant: 5250 },
       { agi: 24999, grant: 4700 },
@@ -167,19 +167,16 @@ function pellOnAPostCardFormula(type) {
 
   return function() {
     var table = pellOnAPostcardLookup[type],
-        grant = table[0].grant;
+        index = table.length,
+        grant = 0,
+        row;
 
     // find nearest agi for grant
-    angular.forEach(table, function(row) {
-      if (row.agi <= values.agi) {
-        grant = row.grant;
-      }
-    });
+    while (index && values.agi < (row = table[--index]).agi) {
+      grant = row.grant;
+    }
 
-    // add 250 per child up to 1000 extra
-    grant = capGrant(grant + Math.min(values.chi*250, 1000), 300, 600);
-
-    return bound(grant);
+    return grant;
   };
 }
 
