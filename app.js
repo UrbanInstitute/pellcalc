@@ -176,7 +176,7 @@ function pellOnAPostCardFormula(type) {
       grant = row.grant;
     }
 
-    return grant;
+    return grant + Math.min(1000, values.chi*250);
   };
 }
 
