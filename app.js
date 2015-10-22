@@ -71,6 +71,7 @@ var parameters = {
 var calculators = [
   {
     name:       'Two-Factor Pell',
+    desc: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
     parameters: ['agi', 'fam'],
     compute: function() {
       var n     = Math.min(values.fam, 6) | 0, // coerce to int with bitwise OR
@@ -81,6 +82,7 @@ var calculators = [
   },
   {
     name:       'Three-Factor Pell',
+    desc: 'Follows the two-factor Pell model but adjusts family size to account for other family members in college.',
     parameters: ['agi', 'fam', 'col'],
     compute: function() {
       var n     = Math.min(values.fam + values.col, 7) | 0,
@@ -91,6 +93,7 @@ var calculators = [
   },
   {
     name:       'Hamilton Project',
+    desc: 'Follows the two-factor Pell model for dependent students. Independent students receive full, half, or no Pell based on AGI.',
     parameters: ['agi', 'fam', 'dep'],
     compute: function() {
       var n     = Math.min(values.fam, 6) | 0,
@@ -110,11 +113,13 @@ var calculators = [
   },
   {
     name:       'Original Pell on a Postcard',
+    desc: 'Based on AGI with extra money for additional children in the family. Includes funds from both Pell and education tax credits.',
     parameters: ['agi', 'chi'],
     compute: pellOnAPostCardFormula('original')
   },
   {
     name:       'Modified Pell on a Postcard',
+    desc: 'Follows the original Pell on a Postcard model but removes education tax credits.',
     parameters: ['agi', 'chi'],
     compute: pellOnAPostCardFormula('modified')
   }
