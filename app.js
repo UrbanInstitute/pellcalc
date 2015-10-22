@@ -1,3 +1,4 @@
+var renderCalc = function(){
 ;(function() {
 
 
@@ -215,32 +216,48 @@ function bound(val, upper, lower) {
 /**
  * create the angular app!
  */
-angular
-  .module('app', ['ui.bootstrap'])
-  .controller('main', ['$scope', function($scope) {
+      angular
+        .module('app', ['ui.bootstrap'])
 
-    // create values object with starting value
-    Object
-      .keys(parameters)
-      .forEach(function(p) { values[p] = parameters[p].start; });
+        .controller('main', ['$scope', function($scope) {
 
-    /**
-     * Add the parameters and calculators to the $scope,
-     * so we can reference them in the angular directives
-     * within index.html
-     */
-    $scope.values = values;
-    $scope.parameters = parameters;
-    $scope.calculators = calculators.map(function(calculator) {
-      calculator.id = calculator
-        .name
-        .toLowerCase()
-        .replace(/\W+/g,'-');
+          // create values object with starting value
+          Object
+            .keys(parameters)
+            .forEach(function(p) { values[p] = parameters[p].start; });
 
-      return calculator;
-    });
+          /**
+           * Add the parameters and calculators to the $scope,
+           * so we can reference them in the angular directives
+           * within index.html
+           */
+          $scope.values = values;
+          $scope.parameters = parameters;
+          $scope.calculators = calculators.map(function(calculator) {
+            calculator.id = calculator
+              .name
+              .toLowerCase()
+              .replace(/\W+/g,'-');
 
-  }]);
+            return calculator;
+          });
+
+          }])
 
 
-})();
+      })();
+}
+// window.setTimeout(foo,300)
+
+
+// foo();
+renderCalc();
+window.setTimeout(function(){
+var pymChild = new pym.Child({ renderCallback: renderCalc });
+}, 20);
+// window.dispatchEvent(new Event('resize'));
+// $   // code here
+   // console.log(pymChild)
+   // console.log("foo")
+   // pymChild.sendHeight();
+// });
