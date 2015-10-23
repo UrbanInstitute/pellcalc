@@ -6,6 +6,12 @@ body {
   margin-bottom: 100px;
 }
 
+@media (min-width: 900px){
+.container {
+    width: 900px;
+}
+}
+
 .align-center {
   text-align: center;
 }
