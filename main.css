@@ -28,12 +28,13 @@ body {
 }
 
 .parameter {
-  display: inline-block;
-  vertical-align: top;
-  text-align: center;
-  word-wrap: break-word;
-  width: 220px;
-  padding: 20px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    word-wrap: break-word;
+    float: left;
+    width: 196px;
+    padding: 5px;
 }
 
 .parameter .range-parameter, .parameter .param-value {
@@ -60,11 +61,11 @@ body {
 }
 
 .parameter .toggle-param.btn-group .btn {
-  font-size: 12px;
-  height: 35px;
-  line-height: 35px;
-  margin-top: 10px;
-  padding-top: 0px;
+    font-size: 12px;
+    height: 55px;
+    line-height: 35px;
+    margin-top: 0px;
+    padding-top: 11px;
 }
 
 .parameter .param-value:hover {
@@ -73,6 +74,18 @@ body {
 
 .parameter .param-name {
   margin-top: 10px;
+}
+
+.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+    color: #fff;
+    background-color: #1696d2 !important;
+    border-color: #8c8c8c;
+}
+
+.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default {
+    color: #fff;
+    background-color: #1696d2;
+    border-color: #adadad;
 }
 
 @media (max-width: 992px) {
