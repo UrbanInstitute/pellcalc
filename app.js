@@ -72,7 +72,8 @@ var parameters = {
 var calculators = [
   {
     name:       'Two-Factor Pell',
-    desc: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
+    // desc: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
+    trust: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
     parameters: ['agi', 'fam'],
     compute: function() {
       var n     = Math.min(values.fam, 6) | 0, // coerce to int with bitwise OR
@@ -219,7 +220,7 @@ function bound(val, upper, lower) {
       angular
         .module('app', ['ui.bootstrap'])
 
-        .controller('main', ['$scope', function($scope) {
+        .controller('main', ['$scope', '$sce', function($scope, $sce) {
 
           // create values object with starting value
           Object
@@ -241,7 +242,11 @@ function bound(val, upper, lower) {
 
             return calculator;
           });
-
+          $scope.calculators.map(function(c){
+           if(typeof(c.trust) != "undefined"){
+              $scope.trusted = $sce.trustAsHtml(c.trust);
+           }
+          })
           }])
 
 

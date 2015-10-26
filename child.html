@@ -64,7 +64,8 @@
 
           <div class="col col-sm-12">
             <h3>{{ calc.name }}</h3>
-            <p>{{ calc.desc}}</p>
+            <p>{{calc.desc}}</p>
+            <p class = "trust" id={{calc.id}} ng-bind-html="trusted"></p>
           </div>
 
           <div class="col col-sm-8 parameter-list">

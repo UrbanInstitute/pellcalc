@@ -1,5 +1,6 @@
 body {
   font-family: Lato,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  height: 100%;
 }
 .container {
   margin-top: 50px;
@@ -25,6 +26,12 @@ body {
   padding-bottom: 30px;
   background-color: #efefef;
   margin-top: 20px;
+}
+p.trust{
+  display: none;
+}
+p.trust#two-factor-pell{
+  display: block;
 }
 
 .parameter {
