@@ -20,7 +20,7 @@
     <div class="container">
 
       <div class="row">
-<!-- 
+<!--
         <div class="col col-sm-12">
           <h1 class="main-title">
             Applying for Pell Grants Shouldn't Be a Game of 105 questions
@@ -72,7 +72,7 @@
               <span ng-repeat="param in calc.parameters"
                     ng-class="{ 'has-error': modelForm[param].$invalid }"
                     class="parameter">
-                <span ng-if="!parameters[param].toggle">
+                <span ng-if="!parameters[param].toggle" focus-me form-invalid="modelForm[param].$invalid">
                   <input type="number"
                          class="form-control range-parameter"
                          id="{{ calc.id + '-' + param }}"
