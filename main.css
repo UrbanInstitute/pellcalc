@@ -118,6 +118,9 @@ p.trust#two-factor-pell{
 .grant-label {
   font-size: 16px;
 }
+label.form-control{
+  pointer-events: none;
+}
 
 .form-error {
   color: #ff5555;
