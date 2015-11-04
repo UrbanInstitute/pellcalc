@@ -68,6 +68,18 @@ var parameters = {
  */
 var calculators = [
   {
+    name:       'Original Pell on a Postcard',
+    desc: 'Based on AGI with extra money for additional children in the family. Includes funds from both Pell and education tax credits.',
+    parameters: ['agi', 'chi'],
+    compute: pellOnAPostCardFormula('original')
+  },
+  {
+    name:       'Modified Pell on a Postcard',
+    desc: 'Follows the original Pell on a Postcard model but removes education tax credits.',
+    parameters: ['agi', 'chi'],
+    compute: pellOnAPostCardFormula('modified')
+  },
+  {
     name:       'Two-Factor Pell',
     // desc: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
     trust: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
@@ -109,19 +121,8 @@ var calculators = [
 
       return bound(grant);
     }
-  },
-  {
-    name:       'Original Pell on a Postcard',
-    desc: 'Based on AGI with extra money for additional children in the family. Includes funds from both Pell and education tax credits.',
-    parameters: ['agi', 'chi'],
-    compute: pellOnAPostCardFormula('original')
-  },
-  {
-    name:       'Modified Pell on a Postcard',
-    desc: 'Follows the original Pell on a Postcard model but removes education tax credits.',
-    parameters: ['agi', 'chi'],
-    compute: pellOnAPostCardFormula('modified')
   }
+  
 ];
 
 
