@@ -26,19 +26,19 @@ var values = {};
  */
 var parameters = {
   dep: {
-    name: 'Student Dependency Status',
+    name: 'Student dependency status',
     toggle: ['Dependent', 'Independent'],
     start: 'Dependent'
   },
   fam: {
-    name: 'Family Size',
+    name: 'Family size',
     max: 100,
     min: 1,
     start: 3,
     pattern: /^\d+/
   },
   agi: {
-    name: 'Adjusted Gross Income',
+    name: 'AGI',
     max: 1000000,
     min: 0,
     start: 30000,
@@ -46,7 +46,7 @@ var parameters = {
     pattern: /^\$?(\d+|\d{1,3}(,\d{3})*)(\.[0-9]{1,2})?$/
   },
   col: {
-    name: 'Number of Other Family in College',
+    name: 'Number of other family members in college',
     min: 0,
     get max() { return Math.min(values.fam - 1, 100); },
     start: 2,
@@ -68,19 +68,19 @@ var parameters = {
  */
 var calculators = [
   {
-    name:       'Original Pell on a Postcard',
+    name:       'Original Pell on a postcard',
     desc: 'Based on AGI with extra money for additional children in the family. Includes funds from both Pell and education tax credits.',
     parameters: ['agi', 'chi'],
     compute: pellOnAPostCardFormula('original')
   },
   {
-    name:       'Modified Pell on a Postcard',
-    desc: 'Follows the original Pell on a Postcard model but removes education tax credits.',
+    name:       'Modified Pell on a postcard',
+    desc: 'Follows the original Pell-on-a-postcard model but removes education tax credits.',
     parameters: ['agi', 'chi'],
     compute: pellOnAPostCardFormula('modified')
   },
   {
-    name:       'Two-Factor Pell',
+    name:       'Two-factor Pell',
     // desc: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
     trust: "Based on AGI relative to the <a href='http://aspe.hhs.gov/2014-poverty-guidelines'>federal poverty level</a>, which varies with family size.",
     parameters: ['agi', 'fam'],
@@ -92,7 +92,7 @@ var calculators = [
     }
   },
   {
-    name:       'Three-Factor Pell',
+    name:       'Three-factor Pell',
     desc: 'Follows the two-factor Pell model but adjusts family size to account for other family members in college.',
     parameters: ['agi', 'fam', 'col'],
     compute: function() {
