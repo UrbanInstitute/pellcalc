@@ -144,29 +144,29 @@ function pellOnAPostCardFormula(type) {
    */
   var pellOnAPostcardLookup = {
     original: [
-      { agi: 14999, grant: 5775 },
-      { agi: 19999, grant: 5250 },
-      { agi: 24999, grant: 4700 },
-      { agi: 29999, grant: 4250 },
-      { agi: 34999, grant: 3450 },
-      { agi: 39999, grant: 2300 },
-      { agi: 44999, grant: 1250 },
-      { agi: 49999, grant: 1050 },
-      { agi: 74999, grant: 800 },
-      { agi: 99999, grant: 600 }
+      { agi: 15000, grant: 5775 },
+      { agi: 20000, grant: 5250 },
+      { agi: 25000, grant: 4700 },
+      { agi: 30000, grant: 4250 },
+      { agi: 35000, grant: 3450 },
+      { agi: 40000, grant: 2300 },
+      { agi: 45000, grant: 1250 },
+      { agi: 50000, grant: 1050 },
+      { agi: 75000, grant: 800 },
+      { agi: 100000, grant: 600 }
     ],
     modified: [
-      { agi: 19999,	grant: 5775 },
-      { agi: 22499,	grant: 5250 },
-      { agi: 24999,	grant: 4700 },
-      { agi: 27499,	grant: 4150 },
-      { agi: 29999,	grant: 3400 },
-      { agi: 32499,	grant: 2850 },
-      { agi: 34999,	grant: 2100 },
-      { agi: 39999,	grant: 1550 },
-      { agi: 44999,	grant: 1050 },
-      { agi: 59999,	grant: 600 },
-      { agi: 74999,	grant: 250 }
+      { agi: 20000,	grant: 5775 },
+      { agi: 22500,	grant: 5250 },
+      { agi: 25000,	grant: 4700 },
+      { agi: 27500,	grant: 4150 },
+      { agi: 30000,	grant: 3400 },
+      { agi: 32500,	grant: 2850 },
+      { agi: 35000,	grant: 2100 },
+      { agi: 40000,	grant: 1550 },
+      { agi: 45000,	grant: 1050 },
+      { agi: 60000,	grant: 600 },
+      { agi: 75000,	grant: 250 }
     ]
   };
 
