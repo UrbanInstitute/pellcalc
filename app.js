@@ -180,8 +180,10 @@ function pellOnAPostCardFormula(type) {
     while (index && values.agi < (row = table[--index]).agi) {
       grant = row.grant;
     }
-
-    return grant + Math.min(1000, values.chi*250);
+    // console.log(grant, values)
+    if(grant != 0){
+      return grant + Math.min(1000, values.chi*250);
+    }else{ return 0}
   };
 }
 
